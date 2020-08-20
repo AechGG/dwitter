@@ -8,17 +8,18 @@ var client = new Twitter({
   access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
 });
 
-console.log(process.env.TWITTER_ACCESS_TOKEN_KEY);
-
-var params = {};
-client.get('statuses/home_timeline', params, function (
+var params = { count: 200 };
+client.get('statuses/user_timeline', params, function (
   error,
   tweets,
   response
 ) {
   console.log(error);
-  for (tweet in tweets) {
-    if (tweet.user === 'aechgg') {
+  console.log(Object.keys(tweets[0]));
+  console.log(JSON.stringify(tweets[0]));
+  for (tweetN in tweets) {
+    let tweet = tweets[tweetN];
+    if (tweet.retweeted == false) {
       console.log(tweet);
     }
   }
