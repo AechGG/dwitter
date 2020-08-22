@@ -8,19 +8,28 @@ var client = new Twitter({
   access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
 });
 
-var params = { count: 200 };
-client.get('statuses/user_timeline', params, function (
-  error,
-  tweets,
-  response
-) {
-  console.log(error);
-  console.log(Object.keys(tweets[0]));
-  console.log(JSON.stringify(tweets[0]));
-  for (tweetN in tweets) {
-    let tweet = tweets[tweetN];
-    if (tweet.retweeted == false) {
+function getTweets(client, callback) {
+  var params = { count: 200, include_rts: false };
+  client.get('statuses/user_timeline', params, function (
+    error,
+    tweets,
+    response
+  ) {
+    console.log(error);
+    console.log(tweets[1]);
+    callback(client, tweets);
+  });
+}
+
+function deleteTweet(client, tweets) {
+  client.post('statuses/destroy', { id: tweets[1].id_str }, function (
+    error,
+    tweet,
+    response
+  ) {
+    if (!error) {
       console.log(tweet);
     }
-  }
-});
+    console.log(error);
+  });
+}
