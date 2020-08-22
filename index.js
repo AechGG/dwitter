@@ -15,8 +15,13 @@ function getTweets(client, callback) {
     tweets,
     response
   ) {
-    console.log(error);
-    console.log(tweets[1]);
+    if (error) {
+      console.error(error);
+      process.exit(1);
+    }
+    console.log(
+      `${tweets.count} tweets with params: ${params} have been collected`
+    );
     callback(client, tweets);
   });
 }
@@ -27,9 +32,12 @@ function deleteTweet(client, tweets) {
     tweet,
     response
   ) {
-    if (!error) {
-      console.log(tweet);
+    if (error) {
+      console.error(error);
+      process.exit(1);
     }
-    console.log(error);
+    console.log(`Tweet with id: ${tweet.id_str} was destroyed`);
   });
 }
+
+getTweets(client, deleteTweet);
